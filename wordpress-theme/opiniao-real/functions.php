@@ -1,19 +1,17 @@
 <?php
 /** Opinião Real theme bootstrap. */
 if (!defined('ABSPATH')) { exit; }
-define('OR_THEME_VERSION', '1.1.0');
+define('OR_THEME_VERSION', '1.2.0');
 function or_setup() {
     add_theme_support('title-tag'); add_theme_support('post-thumbnails');
     add_theme_support('html5', array('search-form','comment-form','comment-list','gallery','caption','style','script'));
-    add_theme_support('custom-logo', array('height'=>64,'width'=>64,'flex-height'=>true,'flex-width'=>true));
-    add_theme_support('elementor');
+    add_theme_support('custom-logo', array('height'=>64,'width'=>64,'flex-height'=>true,'flex-width'=>true)); add_theme_support('elementor');
     register_nav_menus(array('primary'=>'Menu principal','footer_categories'=>'Footer: categorias','footer_institutional'=>'Footer: institucional'));
 }
 add_action('after_setup_theme','or_setup');
 function or_assets() {
     wp_enqueue_style('or-fonts','https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap',array(),null);
-    wp_enqueue_style('or-style',get_stylesheet_uri(),array(),OR_THEME_VERSION);
-    wp_enqueue_script('or-theme',get_template_directory_uri().'/assets/js/theme.js',array(),OR_THEME_VERSION,true);
+    wp_enqueue_style('or-style',get_stylesheet_uri(),array(),OR_THEME_VERSION); wp_enqueue_script('or-theme',get_template_directory_uri().'/assets/js/theme.js',array(),OR_THEME_VERSION,true);
 }
 add_action('wp_enqueue_scripts','or_assets');
 function or_register_content_types() {
@@ -24,59 +22,24 @@ function or_register_content_types() {
     register_taxonomy('content_type',array('seo_article'),array('labels'=>array('name'=>'Tipo editorial','singular_name'=>'Tipo editorial'),'public'=>true,'show_in_rest'=>true,'hierarchical'=>false,'rewrite'=>array('slug'=>'tipo','with_front'=>false)));
 }
 add_action('init','or_register_content_types');
-
-/* Clean category URLs such as /fitness and /fitness/bicicletas-spinning. */
-function or_category_permalink($url,$term){
-    if($term instanceof WP_Term && $term->taxonomy==='category'){
-        $parts=array($term->slug); $parent=(int)$term->parent;
-        while($parent){$p=get_term($parent,'category');if(!$p||is_wp_error($p))break;array_unshift($parts,$p->slug);$parent=(int)$p->parent;}
-        return home_url('/'.implode('/',$parts).'/');
-    }
-    return $url;
-}
+function or_category_permalink($url,$term){if($term instanceof WP_Term&&$term->taxonomy==='category'){$parts=array($term->slug);$parent=(int)$term->parent;while($parent){$p=get_term($parent,'category');if(!$p||is_wp_error($p))break;array_unshift($parts,$p->slug);$parent=(int)$p->parent;}return home_url('/'.implode('/',$parts).'/');}return $url;}
 add_filter('term_link','or_category_permalink',10,2);
-
-/* Preserve root-level article URLs without stealing existing pages or category routes. */
-function or_clean_url_request($query_vars){
-    if(!empty($query_vars['pagename']) && empty($query_vars['name']) && empty($query_vars['post_type'])){
-        $path=trim($query_vars['pagename'],'/');
-        $parts=explode('/',$path);
-        if(count($parts)===1){
-            $slug=$parts[0];
-            $cat=get_category_by_slug($slug);
-            if($cat) return array('category_name'=>$slug);
-            $post=get_page_by_path($slug,OBJECT,'seo_article');
-            if($post) return array('post_type'=>'seo_article','name'=>$slug);
-        } elseif(count($parts)>1){
-            $cat=get_category_by_slug(end($parts));
-            if($cat){$anc=array();$parent=(int)$cat->parent;while($parent){$p=get_term($parent,'category');if(!$p||is_wp_error($p))break;array_unshift($anc,$p->slug);$parent=(int)$p->parent;}if(array_merge($anc,array($cat->slug))===$parts)return array('category_name'=>implode('/',$parts));}
-        }
-    }
-    return $query_vars;
-}
+function or_clean_url_request($query_vars){if(!empty($query_vars['pagename'])&&empty($query_vars['name'])&&empty($query_vars['post_type'])){$path=trim($query_vars['pagename'],'/');$parts=explode('/',$path);if(count($parts)===1){$slug=$parts[0];if($cat=get_category_by_slug($slug))return array('category_name'=>$slug);if($post=get_page_by_path($slug,OBJECT,'seo_article'))return array('post_type'=>'seo_article','name'=>$slug);}elseif(count($parts)>1){$cat=get_category_by_slug(end($parts));if($cat){$anc=array();$parent=(int)$cat->parent;while($parent){$p=get_term($parent,'category');if(!$p||is_wp_error($p))break;array_unshift($anc,$p->slug);$parent=(int)$p->parent;}if(array_merge($anc,array($cat->slug))===$parts)return array('category_name'=>implode('/',$parts));}}}return $query_vars;}
 add_filter('request','or_clean_url_request',20);
-function or_seo_article_permalink($url,$post){if($post instanceof WP_Post && $post->post_type==='seo_article')return home_url('/'.$post->post_name.'/');return $url;}
+function or_seo_article_permalink($url,$post){if($post instanceof WP_Post&&$post->post_type==='seo_article')return home_url('/'.$post->post_name.'/');return $url;}
 add_filter('post_type_link','or_seo_article_permalink',10,2);
-
-function or_elementor_compatibility() { if (did_action('elementor/loaded')) { add_post_type_support('page','elementor'); add_post_type_support('seo_article','elementor'); add_post_type_support('comparison','elementor'); } }
+function or_sync_editorial_taxonomy($post_id,$post,$update){if(wp_is_post_revision($post_id)||defined('DOING_AUTOSAVE')&&DOING_AUTOSAVE||!$post||$post->post_type!=='seo_article')return;$cats=wp_get_post_categories($post_id);if(!$cats)return;$cat=get_category($cats[0]);if(!$cat||is_wp_error($cat))return;$topic=term_exists($cat->slug,'topic');if(!$topic)$topic=wp_insert_term($cat->name,'topic',array('slug'=>$cat->slug));if(!is_wp_error($topic))wp_set_post_terms($post_id,array((int)(is_array($topic)?$topic['term_id']:$topic)),'topic',false);$types=array('review'=>'Review','guide'=>'Guia','comparison'=>'Comparativo');$type=get_post_meta($post_id,'_or_content_type',true);if($type&&isset($types[$type])){$ct=term_exists($type,'content_type');if(!$ct)$ct=wp_insert_term($types[$type],'content_type',array('slug'=>$type));if(!is_wp_error($ct))wp_set_post_terms($post_id,array((int)(is_array($ct)?$ct['term_id']:$ct)),'content_type',false);}if(!get_post_meta($post_id,'_or_pillar_url',true))update_post_meta($post_id,'_or_pillar_url',$cat->slug==='fitness'?home_url('/melhores-bicicletas-spinning/'):($cat->slug==='ferramentas'?home_url('/melhores-ferramentas/'):home_url('/melhores-produtos-casa/')));}
+add_action('save_post','or_sync_editorial_taxonomy',20,3);
+function or_elementor_compatibility(){if(did_action('elementor/loaded')){add_post_type_support('page','elementor');add_post_type_support('seo_article','elementor');add_post_type_support('comparison','elementor');}}
 add_action('init','or_elementor_compatibility',20);
-function or_rank_math_breadcrumbs() { if (function_exists('rank_math_the_breadcrumbs')) { rank_math_the_breadcrumbs(); return true; } return false; }
-function or_fallback_breadcrumbs() {
-    echo '<nav class="or-breadcrumbs" aria-label="Breadcrumb"><a href="'.esc_url(home_url('/')).'">Início</a><span aria-hidden="true"> / </span>';
-    if (is_singular()) { $obj=get_queried_object(); if ($obj instanceof WP_Post) { $topics=get_the_terms($obj->ID,'topic'); if ($topics && !is_wp_error($topics)) echo '<a href="'.esc_url(get_term_link($topics[0])).'">'.esc_html($topics[0]->name).'</a><span aria-hidden="true"> / </span>'; echo '<span>'.esc_html(get_the_title()).'</span>'; } }
-    elseif (is_archive()) echo '<span>'.esc_html(get_the_archive_title()).'</span>'; else echo '<span>'.esc_html(wp_get_document_title()).'</span>'; echo '</nav>';
-}
-function or_breadcrumbs() { if (!or_rank_math_breadcrumbs()) or_fallback_breadcrumbs(); }
-function or_meta($key,$post_id=null) { return get_post_meta($post_id ?: get_the_ID(),$key,true); }
-function or_affiliate_url($url) { return esc_url($url); }
-function or_schema_fallback() {
-    if (class_exists('RankMath\\Schema\\JsonLD\\JsonLD') || !is_singular(array('post','seo_article','comparison','product'))) return;
-    $data=array('@context'=>'https://schema.org','@type'=>is_singular('product')?'Product':'Article','headline'=>get_the_title(),'url'=>get_permalink(),'dateModified'=>get_the_modified_date('c'),'datePublished'=>get_the_date('c'),'description'=>wp_strip_all_tags(get_the_excerpt()),'author'=>array('@type'=>'Organization','name'=>'Equipe Opinião Real'));
-    if (has_post_thumbnail()) $data['image']=array(get_the_post_thumbnail_url(get_the_ID(),'full'));
-    echo '<script type="application/ld+json">'.wp_json_encode($data,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
-}
+function or_rank_math_breadcrumbs(){if(function_exists('rank_math_the_breadcrumbs')){rank_math_the_breadcrumbs();return true;}return false;}
+function or_fallback_breadcrumbs(){echo '<nav class="or-breadcrumbs" aria-label="Breadcrumb"><a href="'.esc_url(home_url('/')).'">Início</a><span aria-hidden="true"> / </span>';if(is_singular()){$obj=get_queried_object();if($obj instanceof WP_Post){$topics=get_the_terms($obj->ID,'topic');if($topics&&!is_wp_error($topics))echo '<a href="'.esc_url(get_term_link($topics[0])).'">'.esc_html($topics[0]->name).'</a><span aria-hidden="true"> / </span>';echo '<span>'.esc_html(get_the_title()).'</span>';}}elseif(is_archive())echo '<span>'.esc_html(get_the_archive_title()).'</span>';else echo '<span>'.esc_html(wp_get_document_title()).'</span>';echo '</nav>';}
+function or_breadcrumbs(){if(!or_rank_math_breadcrumbs())or_fallback_breadcrumbs();}
+function or_meta($key,$post_id=null){return get_post_meta($post_id?:get_the_ID(),$key,true);}
+function or_affiliate_url($url){return esc_url($url);}
+function or_schema_fallback(){if(class_exists('RankMath\\Schema\\JsonLD\\JsonLD')||!is_singular(array('post','seo_article','comparison','product')))return;$data=array('@context'=>'https://schema.org','@type'=>is_singular('product')?'Product':'Article','headline'=>get_the_title(),'url'=>get_permalink(),'dateModified'=>get_the_modified_date('c'),'datePublished'=>get_the_date('c'),'description'=>wp_strip_all_tags(get_the_excerpt()),'author'=>array('@type'=>'Organization','name'=>'Equipe Opinião Real'));if(has_post_thumbnail())$data['image']=array(get_the_post_thumbnail_url(get_the_ID(),'full'));echo '<script type="application/ld+json">'.wp_json_encode($data,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';}
 add_action('wp_head','or_schema_fallback',30);
-function or_favicon() { echo '<link rel="icon" href="'.esc_url(get_template_directory_uri().'/assets/images/favicon.svg').'" type="image/svg+xml">'; }
+function or_favicon(){echo '<link rel="icon" href="'.esc_url(get_template_directory_uri().'/assets/images/favicon.svg').'" type="image/svg+xml">';}
 add_action('wp_head','or_favicon',2);
 require_once get_template_directory().'/inc/class-or-content-importer.php';
 function or_admin_import_menu(){if(current_user_can('manage_options'))add_management_page('Opinião Real: importar conteúdo','Importar Opinião Real','manage_options','or-content-importer','or_content_import_page');}
