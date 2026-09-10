@@ -1,7 +1,7 @@
 <?php
 /** Opinião Real theme bootstrap. */
 if (!defined('ABSPATH')) { exit; }
-define('OR_THEME_VERSION', '1.0.0');
+define('OR_THEME_VERSION', '1.1.0');
 function or_setup() {
     add_theme_support('title-tag'); add_theme_support('post-thumbnails');
     add_theme_support('html5', array('search-form','comment-form','comment-list','gallery','caption','style','script'));
@@ -17,13 +17,29 @@ function or_assets() {
 }
 add_action('wp_enqueue_scripts','or_assets');
 function or_register_content_types() {
-    register_post_type('seo_article',array('labels'=>array('name'=>'Artigos SEO','singular_name'=>'Artigo SEO'),'public'=>true,'show_in_rest'=>true,'has_archive'=>true,'rewrite'=>array('slug'=>'artigos'),'supports'=>array('title','editor','excerpt','thumbnail','revisions','author'),'menu_icon'=>'dashicons-edit-page'));
-    register_post_type('product',array('labels'=>array('name'=>'Produtos','singular_name'=>'Produto'),'public'=>true,'show_in_rest'=>true,'has_archive'=>true,'rewrite'=>array('slug'=>'produtos'),'supports'=>array('title','editor','excerpt','thumbnail','revisions'),'menu_icon'=>'dashicons-products'));
-    register_post_type('comparison',array('labels'=>array('name'=>'Comparativos','singular_name'=>'Comparativo'),'public'=>true,'show_in_rest'=>true,'has_archive'=>true,'rewrite'=>array('slug'=>'comparativos'),'supports'=>array('title','editor','excerpt','thumbnail','revisions'),'menu_icon'=>'dashicons-chart-bar'));
-    register_taxonomy('topic',array('seo_article','product','comparison'),array('labels'=>array('name'=>'Tópicos','singular_name'=>'Tópico'),'public'=>true,'show_in_rest'=>true,'hierarchical'=>true,'rewrite'=>array('slug'=>'categoria')));
-    register_taxonomy('content_type',array('seo_article'),array('labels'=>array('name'=>'Tipo editorial','singular_name'=>'Tipo editorial'),'public'=>true,'show_in_rest'=>true,'hierarchical'=>false,'rewrite'=>array('slug'=>'tipo')));
+    register_post_type('seo_article',array('labels'=>array('name'=>'Artigos SEO','singular_name'=>'Artigo SEO'),'public'=>true,'show_in_rest'=>true,'has_archive'=>true,'rewrite'=>array('slug'=>'artigos','with_front'=>false),'supports'=>array('title','editor','excerpt','thumbnail','revisions','author'),'menu_icon'=>'dashicons-edit-page'));
+    register_post_type('product',array('labels'=>array('name'=>'Produtos','singular_name'=>'Produto'),'public'=>true,'show_in_rest'=>true,'has_archive'=>true,'rewrite'=>array('slug'=>'produtos','with_front'=>false),'supports'=>array('title','editor','excerpt','thumbnail','revisions'),'menu_icon'=>'dashicons-products'));
+    register_post_type('comparison',array('labels'=>array('name'=>'Comparativos','singular_name'=>'Comparativo'),'public'=>true,'show_in_rest'=>true,'has_archive'=>true,'rewrite'=>array('slug'=>'comparativos','with_front'=>false),'supports'=>array('title','editor','excerpt','thumbnail','revisions'),'menu_icon'=>'dashicons-chart-bar'));
+    register_taxonomy('topic',array('seo_article','product','comparison'),array('labels'=>array('name'=>'Tópicos','singular_name'=>'Tópico'),'public'=>true,'show_in_rest'=>true,'hierarchical'=>true,'rewrite'=>array('slug'=>'categoria','with_front'=>false)));
+    register_taxonomy('content_type',array('seo_article'),array('labels'=>array('name'=>'Tipo editorial','singular_name'=>'Tipo editorial'),'public'=>true,'show_in_rest'=>true,'hierarchical'=>false,'rewrite'=>array('slug'=>'tipo','with_front'=>false)));
 }
 add_action('init','or_register_content_types');
+
+/* Preserve root-level SEO URLs without stealing existing pages or category routes. */
+function or_seo_article_request($query_vars){
+    if(!empty($query_vars['pagename']) && empty($query_vars['name']) && empty($query_vars['post_type'])){
+        $slug=trim($query_vars['pagename'],'/');
+        if(strpos($slug,'/')===false){
+            $post=get_page_by_path($slug,OBJECT,'seo_article');
+            if($post) return array('post_type'=>'seo_article','name'=>$slug);
+        }
+    }
+    return $query_vars;
+}
+add_filter('request','or_seo_article_request',20);
+function or_seo_article_permalink($url,$post){if($post instanceof WP_Post && $post->post_type==='seo_article')return home_url('/'.$post->post_name.'/');return $url;}
+add_filter('post_type_link','or_seo_article_permalink',10,2);
+
 function or_elementor_compatibility() { if (did_action('elementor/loaded')) { add_post_type_support('page','elementor'); add_post_type_support('seo_article','elementor'); add_post_type_support('comparison','elementor'); } }
 add_action('init','or_elementor_compatibility',20);
 function or_rank_math_breadcrumbs() { if (function_exists('rank_math_the_breadcrumbs')) { rank_math_the_breadcrumbs(); return true; } return false; }
@@ -37,10 +53,15 @@ function or_meta($key,$post_id=null) { return get_post_meta($post_id ?: get_the_
 function or_affiliate_url($url) { return esc_url($url); }
 function or_schema_fallback() {
     if (class_exists('RankMath\\Schema\\JsonLD\\JsonLD') || !is_singular(array('post','seo_article','comparison','product'))) return;
-    $data=array('@context'=>'https://schema.org','@type'=>is_singular('product')?'Product':'Article','headline'=>get_the_title(),'url'=>get_permalink(),'dateModified'=>get_the_modified_date('c'),'datePublished'=>get_the_date('c'),'description'=>wp_strip_all_tags(get_the_excerpt()));
+    $data=array('@context'=>'https://schema.org','@type'=>is_singular('product')?'Product':'Article','headline'=>get_the_title(),'url'=>get_permalink(),'dateModified'=>get_the_modified_date('c'),'datePublished'=>get_the_date('c'),'description'=>wp_strip_all_tags(get_the_excerpt()),'author'=>array('@type'=>'Organization','name'=>'Equipe Opinião Real'));
     if (has_post_thumbnail()) $data['image']=array(get_the_post_thumbnail_url(get_the_ID(),'full'));
     echo '<script type="application/ld+json">'.wp_json_encode($data,JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE).'</script>';
 }
 add_action('wp_head','or_schema_fallback',30);
 function or_favicon() { echo '<link rel="icon" href="'.esc_url(get_template_directory_uri().'/assets/images/favicon.svg').'" type="image/svg+xml">'; }
 add_action('wp_head','or_favicon',2);
+
+require_once get_template_directory().'/inc/class-or-content-importer.php';
+function or_admin_import_menu(){if(current_user_can('manage_options'))add_management_page('Opinião Real: importar conteúdo','Importar Opinião Real','manage_options','or-content-importer','or_content_import_page');}
+add_action('admin_menu','or_admin_import_menu');
+function or_content_import_page(){if(!current_user_can('manage_options'))return;$done=false;if(isset($_POST['or_import_nonce'])&&wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['or_import_nonce'])),'or_import_content')){$done=OR_Content_Importer::run();}echo '<div class="wrap"><h1>Importar conteúdo Opinião Real</h1><p>Importa ou atualiza os 30 artigos, categorias, páginas-pilar e imagens editoriais. O processo é idempotente.</p><form method="post">'.wp_nonce_field('or_import_content','or_import_nonce',true,false).'<p><button class="button button-primary" type="submit">Importar e publicar 30 artigos</button></p></form>'.($done?'<div class="notice notice-success"><p>Importação concluída. Configure os destinos reais dos links afiliados antes de publicar CTAs comerciais.</p></div>':'').'</div>';}
