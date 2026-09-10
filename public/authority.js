@@ -19,12 +19,18 @@
       if(end)end.insertAdjacentElement('beforebegin',trust);else host.appendChild(trust);
     }
   }
-  function addFooter(){
+  function addFooterLinks(){
+    var footer=document.querySelector('body > footer')||document.querySelector('#root footer');
+    if(!footer||footer.getAttribute('data-authority-links'))return;
+    var host=footer.querySelector('.footerGrid')||footer.querySelector('.authorityShell')||footer;
+    var links=document.createElement('div');links.className='authorityFooterLinks';links.innerHTML='<a href="/sobre-nos">Sobre Nós</a><a href="/como-avaliamos">Como Avaliamos</a><a href="/transparencia">Transparência</a><a href="/privacy">Política de Privacidade</a><a href="/terms">Termos de Uso</a><a href="/afiliados">Aviso de Afiliados</a><a href="/contact">Contato</a>';
+    host.appendChild(links);footer.setAttribute('data-authority-links','true');
+  }
+  function addFallbackFooter(){
     var root=document.getElementById('root');
-    var parent=root||document.querySelector('main')?.parentElement;
-    if(!parent||parent.querySelector('.authorityFooter'))return;
-    var footer=document.createElement('footer');footer.className='authorityFooter';footer.innerHTML='<div class="authorityShell"><div class="authorityLinks"><a href="/sobre-nos">Sobre Nós</a><a href="/como-avaliamos">Como Avaliamos</a><a href="/transparencia">Transparência</a><a href="/politica-de-privacidade">Política de Privacidade</a><a href="/termos">Termos de Uso</a><a href="/afiliados">Aviso de Afiliados</a><a href="/contact">Contato</a></div><div>© 2026 Opinião Real. Portal de análises, comparativos e guias de compra.</div></div>';
-    parent.appendChild(footer);
+    if(!root||root.querySelector('footer'))return;
+    var footer=document.createElement('footer');footer.className='authorityFooter';footer.innerHTML='<div class="authorityShell"><div class="authorityLinks"><a href="/sobre-nos">Sobre Nós</a><a href="/como-avaliamos">Como Avaliamos</a><a href="/transparencia">Transparência</a><a href="/privacy">Política de Privacidade</a><a href="/terms">Termos de Uso</a><a href="/afiliados">Aviso de Afiliados</a><a href="/contact">Contato</a></div><div>© 2026 Opinião Real. Portal de análises, comparativos e guias de compra.</div></div>';
+    root.appendChild(footer);
   }
   function addSchema(){
     var signature=path()+'|'+document.title+'|'+(commercial()?'article':'page');
@@ -38,7 +44,7 @@
     if(commercial())graph.push({'@type':'Article',headline:document.title.replace(/ \|.*$/,''),description:DESCRIPTION,url:'https://opiniaoreal.com'+path(),dateModified:DATE,publisher:{'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/'},author:{'@type':'Organization',name:'Equipe Opinião Real',url:'https://opiniaoreal.com/autor/equipe-opiniao-real'}});
     var s=document.createElement('script');s.id='authority-schema';s.setAttribute('data-signature',signature);s.type='application/ld+json';s.textContent=JSON.stringify({'@context':'https://schema.org','@graph':graph});document.head.appendChild(s);
   }
-  function run(){addMeta();addFooter();addSchema()}
+  function run(){addMeta();addFooterLinks();addFallbackFooter();addSchema()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
   new MutationObserver(function(){run()}).observe(document.documentElement,{childList:true,subtree:true});
 })();
