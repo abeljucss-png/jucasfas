@@ -25,18 +25,36 @@ function or_register_content_types() {
 }
 add_action('init','or_register_content_types');
 
-/* Preserve root-level SEO URLs without stealing existing pages or category routes. */
-function or_seo_article_request($query_vars){
+/* Clean category URLs such as /fitness and /fitness/bicicletas-spinning. */
+function or_category_permalink($url,$term){
+    if($term instanceof WP_Term && $term->taxonomy==='category'){
+        $parts=array($term->slug); $parent=(int)$term->parent;
+        while($parent){$p=get_term($parent,'category');if(!$p||is_wp_error($p))break;array_unshift($parts,$p->slug);$parent=(int)$p->parent;}
+        return home_url('/'.implode('/',$parts).'/');
+    }
+    return $url;
+}
+add_filter('term_link','or_category_permalink',10,2);
+
+/* Preserve root-level article URLs without stealing existing pages or category routes. */
+function or_clean_url_request($query_vars){
     if(!empty($query_vars['pagename']) && empty($query_vars['name']) && empty($query_vars['post_type'])){
-        $slug=trim($query_vars['pagename'],'/');
-        if(strpos($slug,'/')===false){
+        $path=trim($query_vars['pagename'],'/');
+        $parts=explode('/',$path);
+        if(count($parts)===1){
+            $slug=$parts[0];
+            $cat=get_category_by_slug($slug);
+            if($cat) return array('category_name'=>$slug);
             $post=get_page_by_path($slug,OBJECT,'seo_article');
             if($post) return array('post_type'=>'seo_article','name'=>$slug);
+        } elseif(count($parts)>1){
+            $cat=get_category_by_slug(end($parts));
+            if($cat){$anc=array();$parent=(int)$cat->parent;while($parent){$p=get_term($parent,'category');if(!$p||is_wp_error($p))break;array_unshift($anc,$p->slug);$parent=(int)$p->parent;}if(array_merge($anc,array($cat->slug))===$parts)return array('category_name'=>implode('/',$parts));}
         }
     }
     return $query_vars;
 }
-add_filter('request','or_seo_article_request',20);
+add_filter('request','or_clean_url_request',20);
 function or_seo_article_permalink($url,$post){if($post instanceof WP_Post && $post->post_type==='seo_article')return home_url('/'.$post->post_name.'/');return $url;}
 add_filter('post_type_link','or_seo_article_permalink',10,2);
 
@@ -60,8 +78,7 @@ function or_schema_fallback() {
 add_action('wp_head','or_schema_fallback',30);
 function or_favicon() { echo '<link rel="icon" href="'.esc_url(get_template_directory_uri().'/assets/images/favicon.svg').'" type="image/svg+xml">'; }
 add_action('wp_head','or_favicon',2);
-
 require_once get_template_directory().'/inc/class-or-content-importer.php';
 function or_admin_import_menu(){if(current_user_can('manage_options'))add_management_page('Opinião Real: importar conteúdo','Importar Opinião Real','manage_options','or-content-importer','or_content_import_page');}
 add_action('admin_menu','or_admin_import_menu');
-function or_content_import_page(){if(!current_user_can('manage_options'))return;$done=false;if(isset($_POST['or_import_nonce'])&&wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['or_import_nonce'])),'or_import_content')){$done=OR_Content_Importer::run();}echo '<div class="wrap"><h1>Importar conteúdo Opinião Real</h1><p>Importa ou atualiza os 30 artigos, categorias, páginas-pilar e imagens editoriais. O processo é idempotente.</p><form method="post">'.wp_nonce_field('or_import_content','or_import_nonce',true,false).'<p><button class="button button-primary" type="submit">Importar e publicar 30 artigos</button></p></form>'.($done?'<div class="notice notice-success"><p>Importação concluída. Configure os destinos reais dos links afiliados antes de publicar CTAs comerciais.</p></div>':'').'</div>';}
+function or_content_import_page(){if(!current_user_can('manage_options'))return;$done=false;if(isset($_POST['or_import_nonce'])&&wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['or_import_nonce'])),'or_import_content')){$done=OR_Content_Importer::run();}echo '<div class="wrap"><h1>Importar conteúdo Opinião Real</h1><p>Importa ou atualiza os 30 artigos, categorias, páginas-pilar e imagens editoriais. O processo é idempotente.</p><form method="post">'.wp_nonce_field('or_import_content','or_import_nonce',true,false).'<p><button class="button button-primary" type="submit">Importar e publicar 30 artigos</button></p></form>'.($done?'<div class="notice notice-success"><p>Importação concluída. Configure os destinos reais dos links afiliados antes de adicionar CTAs comerciais.</p></div>':'').'</div>';}
