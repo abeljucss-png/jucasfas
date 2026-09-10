@@ -6,9 +6,16 @@ Construir um canal editorial que conecte descoberta no YouTube, aprofundamento n
 
 Fluxo recomendado:
 
-**YouTube → Opinião Real → comparação/análise → oferta verificada**
+**Site ↔ YouTube → Google → análise/comparação → oferta verificada no Mercado Livre**
 
 O caminho inverso também é incentivado: artigos devem apresentar o vídeo relacionado quando ele existir.
+
+## Arquitetura do site
+
+- `/videos` é o hub editorial de vídeos.
+- `/analise-video` documenta o modelo de página e concentra a estrutura editorial.
+- `/analise-video/[produto]` é o padrão de páginas individuais de análise em vídeo.
+- Cada análise em vídeo deve ligar para artigo completo, comparativo ou guia relacionado e, quando houver oferta real conferida, para a página comercial/afiliada.
 
 ## Pilares de conteúdo
 
@@ -85,6 +92,8 @@ Responder objetivamente se o produto faz sentido para o perfil analisado. Evitar
 - sem números, selos, preços ou resultados inventados;
 - sem clickbait que contradiga o conteúdo.
 
+O repositório já contém uma base SVG editorial para os cinco primeiros vídeos. Essas artes não simulam avaliações, preços ou produtos específicos e podem ser substituídas pelas thumbnails reais do YouTube quando os vídeos forem publicados.
+
 ## Monetização
 
 A descrição do vídeo pode conter:
@@ -92,7 +101,7 @@ A descrição do vídeo pode conter:
 1. link para a análise completa;
 2. link para comparação ou guia relacionado;
 3. link comercial/afiliado quando houver oferta real e conferida;
-4. aviso: “Alguns links podem gerar comissão sem custo adicional.”
+4. aviso: “Alguns links podem gerar comissão sem custo adicional para você.”
 
 A comissão nunca deve ser apresentada como prova de qualidade do produto.
 
@@ -121,7 +130,7 @@ Não atribuir vendas ao vídeo sem uma fonte de medição que realmente comprove
 
 ## Integração técnica
 
-As páginas em `/videos` estão preparadas para receber o player real do YouTube. O `public/videos/video-schema.js` gera `VideoObject` somente quando um ID real, thumbnail e data de publicação forem fornecidos. Enquanto não houver vídeo publicado, nenhum `VideoObject` fictício é criado.
+As páginas de `/analise-video` e `/videos` estão preparadas para receber o player real do YouTube. O `public/videos/video-schema.js` só gera `VideoObject` quando existe um ID real e uma data de publicação válida. Ao receber um ID, o script também monta o iframe do YouTube e aceita `data-duration` em formato ISO 8601 quando a duração estiver disponível. Enquanto não houver vídeo publicado, nenhum `VideoObject` fictício é criado.
 
 ## Regras editoriais
 
