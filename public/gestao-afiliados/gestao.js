@@ -1,0 +1,23 @@
+(function(){'use strict';
+var KEY='opiniao_real_affiliate_dashboard_v1';
+var demo={products:[
+{name:'Bicicleta Spinning',category:'Fitness',spend:420,clicks:1280,affiliate:184,sales:9,commission:612},
+{name:'Esteira',category:'Fitness',spend:310,clicks:910,affiliate:96,sales:4,commission:356},
+{name:'Kit Ferramentas',category:'Ferramentas',spend:260,clicks:740,affiliate:72,sales:6,commission:468}
+],campaigns:[
+{name:'spinning · pesquisa',cpc:.94,ctr:4.8,conversion:4.9,costSale:46.67,result:'positivo'},
+{name:'esteira · pesquisa',cpc:1.12,ctr:3.7,conversion:4.2,costSale:77.50,result:'observar'},
+{name:'kits · pesquisa',cpc:.81,ctr:5.4,conversion:8.3,costSale:43.33,result:'positivo'}
+],content:[
+{name:'Melhores bicicletas spinning',views:8420,affiliate:184,sales:9},
+{name:'Melhores kits de ferramentas',views:6210,affiliate:72,sales:6},
+{name:'Melhores esteiras dobráveis',views:5870,affiliate:96,sales:4}
+]};
+function cloneDemo(){return JSON.parse(JSON.stringify(demo))}function load(){try{var x=JSON.parse(localStorage.getItem(KEY)||'null');return x&&x.products&&x.campaigns&&x.content?x:cloneDemo()}catch(_){return cloneDemo()}}function save(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(_){}return d}function money(n){return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}function pct(n){return (n||0).toLocaleString('pt-BR',{maximumFractionDigits:1})+'%'}function esc(v){return String(v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}function productProfit(p){return p.commission-p.spend}function render(){var d=load();var spend=d.products.reduce(function(a,p){return a+p.spend},0),commission=d.products.reduce(function(a,p){return a+p.commission},0),profit=commission-spend,roi=spend?(profit/spend)*100:0;document.getElementById('kpiSpend').textContent=money(spend);document.getElementById('kpiCommission').textContent=money(commission);document.getElementById('kpiProfit').textContent=money(profit);document.getElementById('kpiProfit').className=profit>=0?'positive':'negative';document.getElementById('kpiRoi').textContent=pct(roi);document.getElementById('kpiRoi').className=roi>=0?'positive':'negative';
+ document.getElementById('products').innerHTML=d.products.map(function(p){var profit=productProfit(p);return '<tr><td>'+esc(p.name)+'</td><td>'+esc(p.category)+'</td><td>'+money(p.spend)+'</td><td>'+p.clicks.toLocaleString('pt-BR')+'</td><td>'+p.affiliate.toLocaleString('pt-BR')+'</td><td>'+p.sales+'</td><td>'+money(p.commission)+'</td><td class="'+(profit>=0?'positive':'negative')+'">'+money(profit)+'</td></tr>'}).join('');
+ document.getElementById('campaigns').innerHTML=d.campaigns.map(function(c){var cls=c.result==='positivo'?'positive':c.result==='observar'?'neutral':'negative';return '<tr><td>'+esc(c.name)+'</td><td>'+money(c.cpc)+'</td><td>'+pct(c.ctr)+'</td><td>'+pct(c.conversion)+'</td><td>'+money(c.costSale)+'</td><td class="'+cls+'">'+esc(c.result)+'</td></tr>'}).join('');
+ var sorted=d.content.slice().sort(function(a,b){return b.views-a.views});document.getElementById('content').innerHTML=sorted.map(function(c,i){return '<div class="rankItem"><span class="rankNum">0'+(i+1)+'</span><div><strong>'+esc(c.name)+'</strong><small>'+c.views.toLocaleString('pt-BR')+' acessos · '+c.affiliate.toLocaleString('pt-BR')+' cliques afiliados · '+c.sales+' vendas</small></div><span class="rankMetric">'+c.affiliate+' afiliados</span></div>'}).join('');
+ var alerts=[];d.products.forEach(function(p){if(p.spend>=250&&p.sales===0)alerts.push(['warn','Produto gastando sem resultado','Revise '+p.name+' antes de aumentar a verba.']);var rate=p.clicks?(p.affiliate/p.clicks)*100:0;if(p.clicks>=500&&rate<3)alerts.push(['warn','Página com muitos acessos e poucos cliques','Revise a intenção, CTA e posicionamento de '+p.name+'.']);if(p.sales>=6&&p.affiliate&&p.sales/p.affiliate>=.045)alerts.push(['good','Produto com sinal forte para escalar','Avalie aumentar investimento em '+p.name+' mantendo margem e atribuição verificáveis.'])});if(!alerts.length)alerts.push(['','Sem alertas críticos','Continue monitorando volume, margem e conversão antes de escalar.']);document.getElementById('alerts').innerHTML=alerts.map(function(a){return '<div class="alert '+a[0]+'"><strong>'+a[1]+'</strong><p>'+a[2]+'</p></div>'}).join('');document.getElementById('dataStatus').textContent='Dados demonstrativos · substitua por integração real';
+}
+document.getElementById('resetDemo').addEventListener('click',function(){save(cloneDemo());render();if(window.opiniaoRealTrack)window.opiniaoRealTrack('affiliate_dashboard_reset',{page:location.pathname})});render();
+})();
