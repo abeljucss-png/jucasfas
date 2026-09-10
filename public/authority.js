@@ -10,7 +10,7 @@
     var target=document.querySelector('.reviewPage .crumb')||document.querySelector('main .crumb')||document.querySelector('main .hero');
     if(!target)return;
     var el=document.createElement('section');el.className='commercialAuthority';el.setAttribute('aria-label','Informações editoriais');
-    el.innerHTML='<div class="meta"><span>Atualizado em: 10/09/2026</span><span>Revisado pela equipe Opinião Real</span></div><strong>Sobre esta análise</strong><p>Este conteúdo foi desenvolvido com base em pesquisa de características, comparação de modelos e análise de informações disponíveis. Dados comerciais e especificações devem ser conferidos antes da compra.</p>';
+    el.innerHTML='<div class="meta"><span>Data de publicação: não informada</span><span>Atualizado em: 10/09/2026</span><span>Responsável pela revisão: Equipe Opinião Real</span></div><strong>Sobre esta análise</strong><p>Este conteúdo foi desenvolvido com base em pesquisa de características, comparação de modelos e análise de informações disponíveis. Dados comerciais e especificações devem ser conferidos antes da compra.</p>';
     target.insertAdjacentElement('afterend',el);
     var host=el.parentElement;
     if(host&&!host.querySelector('.commercialTrust')){
