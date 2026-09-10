@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Analytics | Opinião Real</title>
+<link rel="stylesheet" href="/analytics.css">
+</head>
+<body>
+<main class="dashboard">
+  <header class="top">
+    <div><p class="eyebrow">OPINIÃO REAL · ANALYTICS</p><h1>Painel de rastreamento</h1><p class="muted">Área de diagnóstico para acompanhar a instrumentação do site. Métricas de negócio agregadas devem ser consultadas no GA4, sem números simulados aqui.</p></div>
+    <span class="status" id="status">Verificando rastreamento…</span>
+  </header>
+  <section class="grid" aria-label="Estado da instrumentação">
+    <article class="card"><span class="label">GA4</span><div class="metric" id="ga4">—</div><span class="label">ID configurado</span></article>
+    <article class="card"><span class="label">GTM</span><div class="metric" id="gtm">—</div><span class="label">Container configurado</span></article>
+    <article class="card"><span class="label">Eventos locais</span><div class="metric" id="events">0</div><span class="label">Neste navegador</span></article>
+    <article class="card"><span class="label">UTM</span><div class="metric" id="utm">—</div><span class="label">Campanha detectada</span></article>
+  </section>
+  <section class="section card"><h2>Eventos capturados neste navegador</h2><div id="eventList" class="empty">Nenhum evento persistido ainda. Navegue pelo site para validar a instrumentação.</div></section>
+  <section class="section card"><h2>Próximo passo para dados reais</h2><p class="muted">Preencha os IDs em <code>/analytics-config.js</code>. Depois, use o GA4 para relatórios de aquisição, páginas, engajamento e cliques de afiliado. No Google Ads, importe o evento <strong>affiliate_click</strong> somente quando ele representar o objetivo de negócio desejado.</p><div class="links"><a href="/">Voltar ao site</a><a href="/melhores-bicicletas-spinning">Guia de spinning</a></div></section>
+  <div class="notice">Este painel não fabrica visitantes, vendas, cliques ou conversões. Os dados exibidos localmente servem apenas para verificar a implementação no navegador.</div>
+</main>
+<script src="/analytics-config.js"></script>
+<script src="/analytics.js"></script>
+<script>
+(function(){
+  var c=window.OPINIAO_REAL_ANALYTICS||{};
+  document.getElementById('ga4').textContent=c.ga4MeasurementId?'SIM':'NÃO';
+  document.getElementById('gtm').textContent=c.gtmContainerId?'SIM':'NÃO';
+  var dl=window.dataLayer||[];
+  document.getElementById('events').textContent=String(dl.length);
+  var camp=(window.opiniaoRealAnalytics&&window.opiniaoRealAnalytics.getCampaign())||{};
+  document.getElementById('utm').textContent=camp.utm_campaign||camp.utm_source||'NÃO';
+  document.getElementById('status').textContent=(c.ga4MeasurementId||c.gtmContainerId)?'Instrumentação configurada':'Aguardando IDs';
+  var list=document.getElementById('eventList');
+  var items=dl.filter(function(x){return x&&x.event;}).slice(-12).reverse();
+  if(items.length){list.className='rows';list.innerHTML=items.map(function(x){return '<div class="row"><strong>'+String(x.event).replace(/[<>]/g,'')+'</strong><span class="label">'+new Date().toLocaleTimeString('pt-BR')+'</span></div>';}).join('');}
+})();
+</script>
+</body>
+</html>
