@@ -1,0 +1,62 @@
+{
+  "version": "1.0",
+  "source": "React/Vite",
+  "target": "WordPress REST API + custom theme + Gutenberg",
+  "content": {
+    "postType": "seo_article",
+    "fields": {
+      "title": "post_title",
+      "slug": "post_name",
+      "status": "post_status",
+      "content": "post_content",
+      "excerpt": "post_excerpt",
+      "featuredImage": "featured_media",
+      "category": "category",
+      "contentType": "content_type",
+      "topic": "topic",
+      "metaTitle": "meta_title",
+      "metaDescription": "meta_description",
+      "canonical": "canonical_url",
+      "primaryKeyword": "primary_keyword",
+      "secondaryKeywords": "secondary_keywords",
+      "imageAlt": "image_alt",
+      "updatedAt": "updated_at",
+      "sources": "editorial_sources",
+      "faq": "faq",
+      "relatedArticles": "related_articles",
+      "affiliateDisclosure": "affiliate_disclosure"
+    }
+  },
+  "blocks": {
+    "quickSummary": "or/quick-summary",
+    "criteria": "or/criteria",
+    "comparison": "or/comparison-table",
+    "product": "or/product-card",
+    "prosCons": "or/pros-cons",
+    "buyingGuide": "or/buying-guide",
+    "faq": "or/faq",
+    "trust": "or/trust-block",
+    "affiliate": "or/affiliate-cta",
+    "sources": "or/sources",
+    "related": "or/related-content"
+  },
+  "api": {
+    "read": "/wp-json/wp/v2/seo_article",
+    "single": "/wp-json/wp/v2/seo_article/{slug}",
+    "auth": "WordPress authentication for writes; never expose privileged credentials in browser code"
+  },
+  "migration": {
+    "idempotencyKey": "slug",
+    "preserveUrls": true,
+    "redirect": "301",
+    "media": "WordPress Media Library",
+    "reviewBeforePublish": true
+  },
+  "analytics": {
+    "eventLayer": "opiniaoRealTrack equivalent",
+    "events": ["page_view", "affiliate_click", "product_view", "comparison_view", "faq_interaction"]
+  },
+  "search": {
+    "preserve": ["title", "metaDescription", "canonical", "breadcrumb", "Article schema", "FAQ schema when visible", "internal links", "sitemap"]
+  }
+}
