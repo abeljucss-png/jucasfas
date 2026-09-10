@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Expansão de produtos | Opinião Real</title>
+<link rel="stylesheet" href="/expansao-produtos/expansao.css">
+</head>
+<body>
+<main class="expansion">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">OPINIÃO REAL · EXPANSÃO</p>
+      <h1>Máquina de expansão de produtos</h1>
+      <p class="intro">Encontre oportunidades, pontue com o mesmo critério e só escale quando houver sinais reais de demanda, clique e venda.</p>
+    </div>
+    <a class="back" href="/analytics/">Analytics</a>
+  </header>
+
+  <section class="summary-grid" aria-label="Resumo da estratégia">
+    <article class="summary-card"><span>Regra central</span><strong>Validar antes de escalar</strong><small>Conteúdo em volume só entra depois dos sinais comerciais.</small></article>
+    <article class="summary-card"><span>Score</span><strong>0–100 pontos</strong><small>5 dimensões, 20 pontos cada.</small></article>
+    <article class="summary-card"><span>Alta prioridade</span><strong>&gt; 80 pontos</strong><small>Prioridade alta, sem substituir a validação real.</small></article>
+    <article class="summary-card"><span>Conversão</span><strong>Dados reais</strong><small>Cliques e vendas valem mais que intenção isolada.</small></article>
+  </section>
+
+  <section class="panel">
+    <div class="section-head"><div><p class="eyebrow">PIPELINE</p><h2>Fases de expansão</h2></div><p>Comece pelo que já tem aderência editorial e avance apenas quando a categoria demonstrar retorno.</p></div>
+    <div class="phase-grid">
+      <article class="phase active"><span>FASE 1</span><h3>Fitness</h3><ul><li>Bicicletas spinning</li><li>Esteiras</li><li>Equipamentos</li></ul><b>Base prioritária</b></article>
+      <article class="phase"><span>FASE 2</span><h3>Ferramentas</h3><ul><li>Kits</li><li>Parafusadeiras</li><li>Ferramentas sem fio</li></ul><b>Expandir após validação</b></article>
+      <article class="phase"><span>FASE 3</span><h3>Casa</h3><ul><li>Eletroportáteis</li><li>Organização</li><li>Utilidades</li></ul><b>Expandir com evidência</b></article>
+    </div>
+  </section>
+
+  <section class="panel" id="score">
+    <div class="section-head"><div><p class="eyebrow">SCORE 0–100</p><h2>Avaliar uma oportunidade</h2></div><p>Dê de 0 a 20 em cada critério. Não preencha com estimativas inventadas: use dados pesquisados ou marque como pendente.</p></div>
+    <form id="scoreForm" class="score-form">
+      <label>Produto<input id="productName" required placeholder="Ex.: esteira dobrável"></label>
+      <label>Categoria<select id="productCategory"><option>Fitness</option><option>Ferramentas</option><option>Casa</option></select></label>
+      <label>Comissão <span>0–20</span><input class="score-input" data-weight="commission" type="number" min="0" max="20" step="1" value="0"></label>
+      <label>Demanda <span>0–20</span><input class="score-input" data-weight="demand" type="number" min="0" max="20" step="1" value="0"></label>
+      <label>Concorrência <span>0–20</span><input class="score-input" data-weight="competition" type="number" min="0" max="20" step="1" value="0"></label>
+      <label>Potencial de conteúdo <span>0–20</span><input class="score-input" data-weight="content" type="number" min="0" max="20" step="1" value="0"></label>
+      <label>Conversão esperada <span>0–20</span><input class="score-input" data-weight="conversion" type="number" min="0" max="20" step="1" value="0"></label>
+      <div class="score-result"><span>Score</span><strong id="scoreTotal">0</strong><b id="scoreLabel">Aguardando avaliação</b></div>
+      <button type="submit">Adicionar ao pipeline</button>
+    </form>
+    <p class="form-note">O score é um filtro de prioridade. Uma pontuação alta não comprova vendas.</p>
+  </section>
+
+  <section class="panel">
+    <div class="section-head"><div><p class="eyebrow">PORTFÓLIO</p><h2>Oportunidades avaliadas</h2></div><p>Os dados ficam neste navegador até existir uma integração com uma base real. Nenhum resultado comercial é simulado.</p></div>
+    <div id="portfolio" class="portfolio"></div>
+  </section>
+
+  <section class="panel validation">
+    <div class="section-head"><div><p class="eyebrow">GATE DE VALIDAÇÃO</p><h2>Antes de produzir em escala</h2></div><p>Use o mesmo funil para evitar dezenas de páginas sem evidência de retorno.</p></div>
+    <div class="gate-grid">
+      <article><span>01</span><h3>Intenção de busca</h3><p>Confirme consultas relevantes e, principalmente, intenção comercial.</p></article>
+      <article><span>02</span><h3>CPC</h3><p>Observe o custo da disputa e a capacidade de adquirir tráfego com margem.</p></article>
+      <article><span>03</span><h3>Cliques afiliados</h3><p>Meça <code>affiliate_click</code> por página, produto e posição.</p></article>
+      <article><span>04</span><h3>Vendas</h3><p>Confirme comissão e valor efetivamente gerado antes de escalar.</p></article>
+    </div>
+    <div class="decision"><strong>Regra de decisão</strong><p>Teste pequeno → medir → comparar → manter, ajustar ou arquivar → só então criar o cluster completo.</p></div>
+  </section>
+
+  <section class="panel">
+    <div class="section-head"><div><p class="eyebrow">ESTRUTURA EDITORIAL</p><h2>Pacote padrão por produto</h2></div><p>Cada oportunidade aprovada recebe uma estrutura previsível e mensurável.</p></div>
+    <div class="content-grid">
+      <article><span>01</span><h3>Página principal</h3><p>“Melhores [produto]” como página pilar da intenção comercial.</p></article>
+      <article><span>02</span><h3>Artigos de apoio</h3><p>“Vale a pena?”, “como escolher?”, comparação e “melhores modelos”.</p></article>
+      <article><span>03</span><h3>Vídeos</h3><p>Análise e comparação conectadas ao conteúdo do site.</p></article>
+      <article><span>04</span><h3>Monetização</h3><p>Links afiliados com identificação de produto e posição para medir o caminho até a oferta.</p></article>
+    </div>
+  </section>
+
+  <footer>Opinião Real · Estratégia de expansão baseada em dados reais, sem preços, vendas, avaliações ou métricas inventadas.</footer>
+</main>
+<script src="/analytics-config.js"></script>
+<script src="/analytics.js"></script>
+<script src="/expansao-produtos/expansao.js"></script>
+</body>
+</html>
