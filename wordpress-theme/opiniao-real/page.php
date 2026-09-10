@@ -1,0 +1,1 @@
+<?php get_header(); ?><article class="or-article"><div class="or-container"><header class="or-article-header"><?php or_breadcrumbs(); ?><h1><?php the_title(); ?></h1></header><div class="or-content"><?php while(have_posts()): the_post(); the_content(); endwhile; ?></div></div></article><?php get_footer(); ?>
