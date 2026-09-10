@@ -21,13 +21,13 @@
   function apiRoot() {
     const c = config();
     if (!c.enabled || !c.baseUrl) return '';
-    return `${String(c.baseUrl).replace(/\\/+$/, '')}/wp-json/${c.apiNamespace}`;
+    return `${String(c.baseUrl).replace(/\/+$/, '')}/wp-json/${c.apiNamespace}`;
   }
 
   async function request(path, params = {}) {
     const root = apiRoot();
     if (!root) return null;
-    const url = new URL(`${root}/${String(path).replace(/^\\/+/, '')}`);
+    const url = new URL(`${root}/${String(path).replace(/^\/+/, '')}`);
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
     });
