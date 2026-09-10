@@ -1,4 +1,5 @@
 (function(){
+  if(window.__OPINIAO_REAL_AUTHORITY__)return;window.__OPINIAO_REAL_AUTHORITY__=true;
   var BRAND='Opinião Real';
   var DESCRIPTION='Portal de análises, comparativos e guias de compra.';
   var DATE='2026-09-10';
