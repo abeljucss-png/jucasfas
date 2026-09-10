@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Gestão de afiliados | Opinião Real</title>
+<link rel="stylesheet" href="/gestao-afiliados/gestao.css">
+</head>
+<body>
+<main class="ops" data-category="operacao-afiliado">
+<header class="hero"><div><p class="eyebrow">OPINIÃO REAL · OPERAÇÃO</p><h1>Central de gestão de afiliados</h1><p>Uma visão única para acompanhar investimento, comissões, produtos, campanhas e conteúdo. Os valores abaixo são demonstrativos e devem ser substituídos por dados reais.</p></div><nav><a href="/analytics/">Analytics</a><a href="/expansao-produtos/">Expansão</a></nav></header>
+<section class="toolbar panel"><div><span class="label">PERÍODO</span><select id="period"><option>Últimos 30 dias</option><option>Últimos 7 dias</option><option>Este mês</option></select></div><div><span class="label">FONTE DE DADOS</span><strong id="dataStatus">Modo demonstrativo</strong></div><button id="resetDemo" type="button">Restaurar dados demonstrativos</button></section>
+<section class="kpis" aria-label="Métricas principais">
+<article><span>Investimento em anúncios</span><strong id="kpiSpend">R$ 0,00</strong><small>Google Ads / outras fontes</small></article>
+<article><span>Comissões recebidas</span><strong id="kpiCommission">R$ 0,00</strong><small>Receita atribuída</small></article>
+<article><span>Lucro / prejuízo</span><strong id="kpiProfit">R$ 0,00</strong><small>Comissão − investimento</small></article>
+<article><span>ROI</span><strong id="kpiRoi">0%</strong><small>Lucro ÷ investimento</small></article>
+</section>
+<section class="panel"><div class="sectionHead"><div><p class="eyebrow">PRODUTOS</p><h2>Resultado por produto</h2></div><p>Compare o custo para gerar tráfego com cliques, vendas e comissão atribuída.</p></div><div class="tableWrap"><table><thead><tr><th>Produto</th><th>Categoria</th><th>Investimento</th><th>Cliques</th><th>Afiliado</th><th>Vendas</th><th>Comissão</th><th>Lucro</th></tr></thead><tbody id="products"></tbody></table></div></section>
+<section class="panel"><div class="sectionHead"><div><p class="eyebrow">CAMPANHAS</p><h2>Eficiência de aquisição</h2></div><p>CPC, CTR, conversão e custo por venda ajudam a decidir onde reduzir ou aumentar investimento.</p></div><div class="tableWrap"><table><thead><tr><th>Campanha</th><th>CPC</th><th>CTR</th><th>Conversão</th><th>Custo por venda</th><th>Resultado</th></tr></thead><tbody id="campaigns"></tbody></table></div></section>
+<section class="twoCol"><div class="panel"><div class="sectionHead"><div><p class="eyebrow">CONTEÚDO</p><h2>O que merece atenção</h2></div></div><div class="rankList" id="content"></div></div><div class="panel"><div class="sectionHead"><div><p class="eyebrow">DECISÃO</p><h2>Alertas operacionais</h2></div></div><div class="alerts" id="alerts"></div></div></section>
+<section class="panel methodology"><div class="sectionHead"><div><p class="eyebrow">COMO USAR</p><h2>Decisão baseada em evidência</h2></div></div><div class="decisionGrid"><div><b>01 · Cortar</b><p>Reduza ou pause produtos que consomem verba sem vendas e sem sinais de melhoria.</p></div><div><b>02 · Melhorar</b><p>Otimize páginas com tráfego relevante, mas poucos cliques afiliados.</p></div><div><b>03 · Escalar</b><p>Aumente investimento somente quando conversão e margem justificarem o risco.</p></div></div><p class="note">Este painel não consulta automaticamente contas de anúncios ou redes de afiliados. Uma integração futura deve alimentar os mesmos campos sem colocar credenciais privadas no navegador.</p></section>
+<footer>Opinião Real · Central operacional · Sem métricas, vendas ou resultados fictícios apresentados como reais.</footer>
+</main>
+<script src="/analytics-config.js"></script><script src="/analytics.js"></script><script src="/gestao-afiliados/gestao.js"></script>
+</body>
+</html>
