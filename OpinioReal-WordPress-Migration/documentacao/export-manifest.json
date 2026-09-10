@@ -1,0 +1,52 @@
+{
+  "name": "Opinião Real WordPress Migration",
+  "version": "1.0.0",
+  "source": "React/Vite",
+  "target": "WordPress + Elementor compatible theme",
+  "designPreservation": true,
+  "sourceOfTruth": {
+    "application": ["src/main.jsx", "src/styles.css", "src/spinning.css"],
+    "publicStyles": ["public/portal.css", "public/seo-article.css", "public/authority.css", "public/audience.css", "public/brand.css", "public/videos/video.css"],
+    "brand": ["public/brand/opiniao-real-mark.svg", "docs/brand-guidelines.md"]
+  },
+  "pages": {
+    "home": "/",
+    "categories": ["/fitness", "/fitness/bicicletas-spinning", "/fitness/esteiras", "/fitness/equipamentos", "/ferramentas", "/ferramentas/parafusadeiras", "/ferramentas/kits-de-ferramentas", "/ferramentas/ferramentas-sem-fio", "/casa", "/casa/cozinha", "/casa/organizacao", "/casa/eletroportateis"],
+    "editorial": ["/comparativos", "/guias-de-compra", "/videos", "/analise-video"],
+    "institutional": ["/sobre-nos", "/como-avaliamos", "/transparencia", "/afiliados", "/autor/equipe-opiniao-real", "/materiais-gratuitos"],
+    "operational": ["/admin/artigos/", "/admin/seo/", "/gestao-afiliados/", "/analytics/"]
+  },
+  "components": ["header", "navigation", "footer", "hero", "category-card", "article-card", "product-card", "quick-choice", "trust-block", "comparison-table", "pros-cons", "buying-guide", "faq", "affiliate-cta", "related-content", "breadcrumbs"],
+  "tokens": {
+    "primary": "#0B1F3A",
+    "secondary": "#294D75",
+    "background": "#FFFFFF",
+    "softBackground": "#F6F8FB",
+    "text": "#172033",
+    "muted": "#667085",
+    "line": "#E5E9EF",
+    "accent": "#C98B3C",
+    "headingFont": "Playfair Display, Georgia, serif",
+    "bodyFont": "DM Sans, system-ui, sans-serif",
+    "breakpoints": [850, 480]
+  },
+  "seo": {
+    "friendlyUrls": true,
+    "oneH1": true,
+    "breadcrumbs": true,
+    "articleSchema": true,
+    "faqSchemaWhenVisible": true,
+    "canonical": true,
+    "sitemap": true,
+    "redirects": "301 when URL changes"
+  },
+  "migrationRules": [
+    "Do not redesign",
+    "Do not publish placeholders as real product data",
+    "Keep content editable in WordPress",
+    "Preserve public URLs whenever possible",
+    "Validate responsive behavior before cutover",
+    "Validate schema against visible content",
+    "Do not expose privileged credentials in browser code"
+  ]
+}
