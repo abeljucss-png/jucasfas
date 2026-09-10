@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 import { buildAffiliateAttributes, CONTENT_TYPES } from './contentTemplates';
+import './content-templates.css';
 
 /**
  * Blocos visuais reutilizáveis para novos artigos.
@@ -16,7 +17,7 @@ export function RelatedContent({ items = [], title = 'Veja também' }) {
         <span>{item.category || 'Guia'}</span>
         <strong>{item.title}</strong>
         <ArrowRight size={16} aria-hidden="true" />
-      </a>)}
+      )}
     </div>
   </section>;
 }
