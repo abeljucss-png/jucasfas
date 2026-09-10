@@ -1,0 +1,14 @@
+(function(){'use strict';
+var KEY='opiniao_real_product_pipeline_v1';
+var fields=['commission','demand','competition','content','conversion'];
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(_){return []}}
+function save(items){try{localStorage.setItem(KEY,JSON.stringify(items.slice(-100)))}catch(_){}
+}
+function score(){return fields.reduce(function(total,key){var input=document.querySelector('[data-weight="'+key+'"]');var value=Number(input&&input.value||0);return total+Math.max(0,Math.min(20,value))},0)}
+function label(total){if(total>80)return 'Alta prioridade';if(total>=60)return 'Prioridade média';if(total>0)return 'Baixa prioridade';return 'Aguardando avaliação'}
+function renderScore(){var total=score();document.getElementById('scoreTotal').textContent=String(total);document.getElementById('scoreLabel').textContent=label(total)}
+function esc(value){return String(value||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function renderPortfolio(){var root=document.getElementById('portfolio'),items=load();if(!items.length){root.innerHTML='<div class="portfolio-empty">Nenhuma oportunidade adicionada ainda. Use o avaliador acima para iniciar o pipeline.</div>';return}root.innerHTML=items.slice().reverse().map(function(item){return '<article class="product-row"><div><strong>'+esc(item.name)+'</strong><small>'+esc(item.category)+' · '+new Date(item.createdAt).toLocaleDateString('pt-BR')+'</small></div><span class="pill">'+esc(label(item.score))+'</span><span class="product-score"><strong>'+item.score+'</strong><small>/100</small></span><small>Próximo passo: '+(item.score>80?'validar com teste comercial':item.score>=60?'pesquisar e testar com cautela':'não escalar ainda')+'</small></article>'}).join('')}
+function submit(event){event.preventDefault();var name=document.getElementById('productName').value.trim();if(!name)return;var item={name:name,category:document.getElementById('productCategory').value,score:score(),breakdown:{},createdAt:new Date().toISOString()};fields.forEach(function(key){item.breakdown[key]=Number(document.querySelector('[data-weight="'+key+'"]').value||0)});var items=load();items.push(item);save(items);if(window.opiniaoRealTrack)window.opiniaoRealTrack('product_opportunity_scored',{product_name:name,category:item.category,score:item.score,priority:label(item.score)});renderPortfolio();document.getElementById('scoreForm').reset();document.querySelectorAll('.score-input').forEach(function(input){input.value='0'});renderScore()}
+document.querySelectorAll('.score-input').forEach(function(input){input.addEventListener('input',renderScore)});document.getElementById('scoreForm').addEventListener('submit',submit);renderScore();renderPortfolio();
+})();
