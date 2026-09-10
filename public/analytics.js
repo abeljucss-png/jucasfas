@@ -103,3 +103,8 @@
   history.replaceState = function () { var result = originalReplaceState.apply(this, arguments); routeChanged(); return result; };
   window.addEventListener('popstate', routeChanged);
 })();
+
+(function(){
+  if(window.location.pathname.indexOf('/analytics')===0||window.__OPINIAO_REAL_AUTHORITY__)return;
+  var script=document.createElement('script');script.src='/authority.js';script.defer=true;document.head.appendChild(script);
+})();
