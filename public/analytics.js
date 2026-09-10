@@ -47,7 +47,7 @@
   function scrollDepth() {
     var doc = document.documentElement, max = Math.max(doc.scrollHeight - window.innerHeight, 1), percent = Math.round((window.scrollY / max) * 100);
     if (percent <= lastScroll) return; lastScroll = percent;
-    milestones.forEach(function (mark) { if (percent >= mark && !sent[mark]) { sent[mark] = true; push('scroll_depth', Object.assign({ depth_percent: mark }, pageContext())); } });
+    milestones.forEach(function (mark) { if (percent >= mark && !sent[mark]) { sent[mark] = true; push('scroll_depth', Object.assign({ depth_percent: mark }, pageContext())); if (mark === 75) push('remarketing_article_read', Object.assign({ depth_percent: mark }, pageContext())); } });
   }
   window.addEventListener('scroll', scrollDepth, { passive: true });
 
@@ -61,7 +61,9 @@
     if (el.matches('[data-affiliate], a[href*="mercadolivre.com"], a[href*="amazon."]')) {
       var product = closestProduct(el), card = el.closest('[data-cta-position], .productCard, .detailProduct, .comparisonSection, .hero, .buyingGuide');
       var position = el.dataset.ctaPosition || card && card.dataset.ctaPosition || card && card.className.split(' ')[0] || 'unknown';
-      push('affiliate_click', Object.assign({ category: el.dataset.category || document.body.dataset.category || 'unknown', page: window.location.pathname, button_position: position, destination_url: el.href || '', link_text: el.textContent.trim() }, product));
+      var payload = Object.assign({ category: el.dataset.category || document.body.dataset.category || 'unknown', page: window.location.pathname, button_position: position, destination_url: el.href || '', link_text: el.textContent.trim() }, product);
+      push('affiliate_click', payload);
+      push('remarketing_affiliate_click', payload);
     }
     if (el.matches('summary, [data-faq], .faqItem button')) {
       var faq = el.closest('details, [data-faq], .faqItem'), question = faq && (faq.querySelector('summary') || faq.querySelector('button'));
@@ -74,7 +76,10 @@
     entries.forEach(function (entry) {
       if (!entry.isIntersecting || viewed.has(entry.target)) return;
       viewed.add(entry.target); var el = entry.target;
-      if (el.matches('[data-product-view], .detailProduct, .productCard')) push('product_view', Object.assign({ page: window.location.pathname }, closestProduct(el)));
+      if (el.matches('[data-product-view], .detailProduct, .productCard')) {
+        var productPayload = Object.assign({ page: window.location.pathname }, closestProduct(el));
+        push('product_view', productPayload); push('remarketing_product_view', productPayload);
+      }
       if (el.matches('[data-comparison-view], .comparisonSection')) push('comparison_view', { page: window.location.pathname, section: el.dataset.section || 'comparison' });
     });
   }, { threshold: 0.35 }) : null;
@@ -96,7 +101,11 @@
     document.querySelectorAll('[data-ab-test]').forEach(function (el) { if (el.dataset.abVariant === variant && !el.dataset.abTracked) { el.dataset.abTracked = 'true'; push('experiment_exposure', { experiment: el.dataset.abTest, variant: variant, page: window.location.pathname }); } });
   }
   experiment();
-  window.addEventListener('beforeunload', function () { push('engagement_time', Object.assign({ engagement_time_ms: Date.now() - pageStart }, pageContext())); });
+  window.addEventListener('beforeunload', function () {
+    var max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1), percent = Math.round((window.scrollY / max) * 100);
+    push('engagement_time', Object.assign({ engagement_time_ms: Date.now() - pageStart }, pageContext()));
+    if (Date.now() - pageStart >= 15000 && percent < 75) push('remarketing_page_abandon', Object.assign({ scroll_percent: percent }, pageContext()));
+  });
   var originalPushState = history.pushState, originalReplaceState = history.replaceState;
   function routeChanged() { setTimeout(function () { push('page_view', pageContext()); scanTrackedElements(); experiment(); }, 0); }
   history.pushState = function () { var result = originalPushState.apply(this, arguments); routeChanged(); return result; };
