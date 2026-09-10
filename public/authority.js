@@ -2,13 +2,7 @@
   var BRAND='Opinião Real';
   var DESCRIPTION='Portal de análises, comparativos e guias de compra.';
   var DATE='2026-09-10';
-  var COMMERCIAL=[
-    '/melhores-bicicletas-spinning','/bicicleta-spinning-apartamento','/bicicleta-spinning-emagrece',
-    '/bicicleta-spinning-profissional-ou-residencial','/bicicleta-spinning-silenciosa','/bicicleta-spinning-vale-a-pena',
-    '/como-escolher-bicicleta-spinning','/comparativos/bicicleta-spinning-a-vs-b','/comparativos/parafusadeira-a-vs-b','/comparativos/esteira-a-vs-b',
-    '/ferramentas/melhores-kits-de-ferramentas'
-  ];
-  var AUTH=['/como-avaliamos','/sobre-nos','/transparencia','/afiliados','/autor/equipe-opiniao-real','/politica-de-privacidade','/termos','/contact'];
+  var COMMERCIAL=['/melhores-bicicletas-spinning','/bicicleta-spinning-apartamento','/bicicleta-spinning-emagrece','/bicicleta-spinning-profissional-ou-residencial','/bicicleta-spinning-silenciosa','/bicicleta-spinning-vale-a-pena','/como-escolher-bicicleta-spinning','/comparativos/bicicleta-spinning-a-vs-b','/comparativos/parafusadeira-a-vs-b','/comparativos/esteira-a-vs-b','/ferramentas/melhores-kits-de-ferramentas'];
   function path(){return window.location.pathname.replace(/\/$/,'')||'/'}
   function commercial(){return COMMERCIAL.indexOf(path())!==-1}
   function addMeta(){
@@ -28,18 +22,21 @@
   function addFooter(){
     var root=document.getElementById('root');
     var parent=root||document.querySelector('main')?.parentElement;
-    if(!parent||parent.querySelector(':scope > .authorityFooter'))return;
+    if(!parent||parent.querySelector('.authorityFooter'))return;
     var footer=document.createElement('footer');footer.className='authorityFooter';footer.innerHTML='<div class="authorityShell"><div class="authorityLinks"><a href="/sobre-nos">Sobre Nós</a><a href="/como-avaliamos">Como Avaliamos</a><a href="/transparencia">Transparência</a><a href="/politica-de-privacidade">Política de Privacidade</a><a href="/termos">Termos de Uso</a><a href="/afiliados">Aviso de Afiliados</a><a href="/contact">Contato</a></div><div>© 2026 Opinião Real. Portal de análises, comparativos e guias de compra.</div></div>';
     parent.appendChild(footer);
   }
   function addSchema(){
-    var old=document.getElementById('authority-schema');if(old)old.remove();
+    var signature=path()+'|'+document.title+'|'+(commercial()?'article':'page');
+    var current=document.getElementById('authority-schema');
+    if(current&&current.getAttribute('data-signature')===signature)return;
+    if(current)current.remove();
     var graph=[{'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/',description:DESCRIPTION}];
     var crumb=[{'@type':'ListItem',position:1,name:'Início',item:'https://opiniaoreal.com/'}];
     if(path()!=='/')crumb.push({'@type':'ListItem',position:2,name:document.title.replace(/ \|.*$/,''),item:'https://opiniaoreal.com'+path()});
     graph.push({'@type':'BreadcrumbList',itemListElement:crumb});
     if(commercial())graph.push({'@type':'Article',headline:document.title.replace(/ \|.*$/,''),description:DESCRIPTION,url:'https://opiniaoreal.com'+path(),dateModified:DATE,publisher:{'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/'},author:{'@type':'Organization',name:'Equipe Opinião Real',url:'https://opiniaoreal.com/autor/equipe-opiniao-real'}});
-    var s=document.createElement('script');s.id='authority-schema';s.type='application/ld+json';s.textContent=JSON.stringify({'@context':'https://schema.org','@graph':graph});document.head.appendChild(s);
+    var s=document.createElement('script');s.id='authority-schema';s.setAttribute('data-signature',signature);s.type='application/ld+json';s.textContent=JSON.stringify({'@context':'https://schema.org','@graph':graph});document.head.appendChild(s);
   }
   function run(){addMeta();addFooter();addSchema()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
