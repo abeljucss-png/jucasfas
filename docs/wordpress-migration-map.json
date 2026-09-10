@@ -1,0 +1,66 @@
+{
+  "project": "Opinião Real",
+  "source": "React/Vite",
+  "target": "WordPress custom theme + Gutenberg/editorial content model",
+  "preserve": {
+    "brand": ["public/brand/opiniao-real-mark.svg", "public/brand.css", "docs/brand-guidelines.md"],
+    "analytics": ["public/analytics.js", "public/analytics-config.js", "public/analytics.css"],
+    "audience": ["public/audience.js", "public/audience-config.js", "public/audience.css"],
+    "seo": ["public/seo-article.css", "public/seo-articles-content.js", "public/seo-articles-runtime-v2.js", "public/sitemap.xml", "public/robots.txt"],
+    "authority": ["public/authority.js", "public/authority.css"],
+    "videos": ["public/videos/", "public/analise-video/"]
+  },
+  "visual_components": {
+    "source": ["src/main.jsx", "src/styles.css", "src/spinning.css", "public/portal.css", "public/seo-article.css", "public/authority.css", "public/audience.css"],
+    "wordpress": "template-parts/ + assets/css/ + Gutenberg blocks"
+  },
+  "static_pages": [
+    "/sobre-nos",
+    "/como-avaliamos",
+    "/transparencia",
+    "/afiliados",
+    "/autor/equipe-opiniao-real",
+    "/materiais-gratuitos",
+    "/guias-de-compra",
+    "/comparativos",
+    "/videos",
+    "/analise-video"
+  ],
+  "templates": {
+    "front-page": "front-page.php",
+    "article": "single-seo_article.php",
+    "category": "archive.php",
+    "page": "page.php",
+    "comparison": "page-templates/page-comparativo.php",
+    "guide": "page-templates/page-guia-compra.php",
+    "video": "single-video.php"
+  },
+  "content": {
+    "post_type": "seo_article",
+    "article_types": ["review", "guide", "comparison"],
+    "taxonomies": ["category", "content_type", "topic"],
+    "metadata": ["meta_title", "meta_description", "canonical_url", "primary_keyword", "secondary_keywords", "image_alt", "updated_at"],
+    "structured_sections": ["quick_summary", "criteria", "comparison", "products", "pros_cons", "daily_use", "faq", "sources", "related_content", "affiliate_disclosure"]
+  },
+  "media": {
+    "logo": "public/brand/opiniao-real-mark.svg",
+    "video_thumbnails": "public/videos/thumb-*.svg",
+    "product_images": "WordPress Media Library",
+    "rule": "Do not migrate product placeholders as real product photography"
+  },
+  "admin": {
+    "replace_with_wordpress": ["public/admin/artigos/", "public/admin/seo/", "public/gestao-afiliados/"],
+    "reason": "These are browser/localStorage admin interfaces and should not remain as public WordPress content."
+  },
+  "url_policy": {
+    "keep_existing_slugs": true,
+    "redirect_changed_urls": "301",
+    "validate": ["canonical", "sitemap", "robots", "404", "internal_links", "schema"]
+  },
+  "editorial_rules": {
+    "no_fabricated": ["prices", "specifications", "ratings", "reviews", "tests", "availability", "results", "testimonials"],
+    "affiliate_links": "tracked and rel=sponsored",
+    "faq_schema": "only from visible FAQ content",
+    "tone": "specialist helping a friend, without artificial urgency"
+  }
+}
