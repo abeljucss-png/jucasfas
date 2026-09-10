@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>CMS de Artigos | Opinião Real</title>
+  <link rel="stylesheet" href="/admin/artigos/artigos.css">
+</head>
+<body>
+  <main class="cms">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">OPINIÃO REAL · CMS</p>
+        <h1>Central de artigos SEO</h1>
+        <p class="subtitle">Cadastre, organize e prepare artigos para publicação sem perder o padrão editorial.</p>
+      </div>
+      <nav aria-label="Navegação administrativa">
+        <a href="/">Site</a>
+        <a href="/admin/seo/">SEO</a>
+        <a href="/analytics/">Analytics</a>
+        <button id="newArticle" class="button primary" type="button">Novo artigo</button>
+      </nav>
+    </header>
+
+    <section class="stats" aria-label="Resumo do CMS">
+      <article><span>Total</span><strong id="statTotal">0</strong><small>artigos cadastrados</small></article>
+      <article><span>Rascunhos</span><strong id="statDraft">0</strong><small>em produção</small></article>
+      <article><span>Revisão</span><strong id="statReview">0</strong><small>aguardando conferência</small></article>
+      <article><span>Publicados</span><strong id="statPublished">0</strong><small>prontos no CMS</small></article>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel library" aria-label="Biblioteca de artigos">
+        <div class="panelHead">
+          <div><p class="eyebrow">BIBLIOTECA</p><h2>Artigos</h2></div>
+          <span id="saveState" class="saveState">Dados locais</span>
+        </div>
+        <label class="searchLabel" for="articleSearch">Buscar</label>
+        <input id="articleSearch" type="search" placeholder="Título, slug ou palavra-chave">
+        <div class="filters">
+          <select id="statusFilter" aria-label="Filtrar por status"><option value="all">Todos os status</option><option value="draft">Rascunho</option><option value="review">Em revisão</option><option value="published">Publicado</option></select>
+          <select id="typeFilter" aria-label="Filtrar por tipo"><option value="all">Todos os tipos</option><option value="review">Review</option><option value="guide">Guia</option><option value="comparison">Comparativo</option></select>
+        </div>
+        <div id="articleList" class="articleList"></div>
+      </aside>
+
+      <section class="panel editor" aria-label="Editor de artigo">
+        <div class="editorHead">
+          <div><p class="eyebrow">EDITOR</p><h2 id="editorTitle">Novo artigo</h2></div>
+          <div class="actions"><button id="duplicateArticle" class="button" type="button" disabled>Duplicar</button><button id="deleteArticle" class="button danger" type="button" disabled>Excluir</button></div>
+        </div>
+        <form id="articleForm" novalidate>
+          <input id="articleId" type="hidden">
+          <div class="sectionTitle"><span>01</span><div><h3>Identidade editorial</h3><p>Defina o conteúdo antes de entrar nos detalhes SEO.</p></div></div>
+          <div class="grid two">
+            <label>Título do artigo<input id="title" name="title" required maxlength="120" placeholder="Ex.: Melhores bicicletas spinning para casa em 2026"></label>
+            <label>Slug<input id="slug" name="slug" required maxlength="100" placeholder="melhores-bicicletas-spinning"></label>
+            <label>Tipo<select id="type" name="type"><option value="review">Review / ranking</option><option value="guide">Guia</option><option value="comparison">Comparativo</option></select></label>
+            <label>Categoria<select id="category" name="category"><option>Fitness em Casa</option><option>Ferramentas</option><option>Casa e Utilidades</option></select></label>
+            <label>Status<select id="status" name="status"><option value="draft">Rascunho</option><option value="review">Em revisão</option><option value="published">Publicado</option></select></label>
+            <label>Data editorial<input id="publishDate" name="publishDate" type="date"></label>
+          </div>
+
+          <div class="sectionTitle"><span>02</span><div><h3>SEO on-page</h3><p>Campos usados para intenção, snippet e organização semântica.</p></div></div>
+          <div class="grid two">
+            <label>Meta title<input id="metaTitle" maxlength="60" placeholder="Até cerca de 60 caracteres"></label>
+            <label>Meta description<textarea id="metaDescription" maxlength="160" rows="2" placeholder="Descrição clara e específica da página"></textarea></label>
+            <label>Palavra-chave principal<input id="primaryKeyword" placeholder="Ex.: bicicleta spinning para casa"></label>
+            <label>Palavras-chave secundárias<input id="secondaryKeywords" placeholder="separe por vírgulas"></label>
+            <label>Canonical<input id="canonical" placeholder="https://opiniaoreal.com/seu-slug"></label>
+            <label>ALT da imagem principal<input id="imageAlt" placeholder="Descrição objetiva da imagem"></label>
+          </div>
+
+          <div class="sectionTitle"><span>03</span><div><h3>Conteúdo principal</h3><p>Estrutura preparada para textos humanos, úteis e verificáveis.</p></div></div>
+          <div class="contentStack">
+            <label>H1<input id="h1" placeholder="Título principal exibido na página"></label>
+            <label>Introdução<textarea id="intro" rows="5" placeholder="Apresente o problema do leitor e o que ele encontrará no artigo."></textarea></label>
+            <label>Resumo rápido<textarea id="quickSummary" rows="5" placeholder="Resumo em pontos: para quem é, critérios principais e conclusão inicial."></textarea></label>
+            <label>Como escolher / critérios<textarea id="howToChoose" rows="7" placeholder="Explique critérios, limitações e como interpretar as características."></textarea></label>
+            <label>Conteúdo aprofundado<textarea id="body" rows="12" placeholder="Texto principal do artigo. Use parágrafos e subtítulos H2/H3 na etapa de publicação."></textarea></label>
+            <label>Uso no dia a dia<textarea id="dailyUse" rows="6" placeholder="Descreva cenários de uso sem inventar testes ou experiências próprias."></textarea></label>
+            <label>Conclusão<textarea id="conclusion" rows="5" placeholder="Feche a decisão e indique o próximo passo adequado ao leitor."></textarea></label>
+          </div>
+
+          <div class="sectionTitle"><span>04</span><div><h3>Comparação e produtos</h3><p>Registre apenas dados conferidos. Campos não verificados ficam explícitos.</p></div></div>
+          <label>Tabela comparativa<textarea id="comparison" rows="8" placeholder="Produto | Indicação | Características | Pontos fortes | Pontos fracos | Fonte"></textarea></label>
+          <label>Produtos analisados<textarea id="products" rows="10" placeholder="Um produto por bloco. Inclua nome, resumo, prós, contras, fonte, URL real e ALT da imagem."></textarea></label>
+
+          <div class="sectionTitle"><span>05</span><div><h3>FAQ e distribuição</h3><p>As respostas do FAQ devem corresponder exatamente ao que aparece na página publicada.</p></div></div>
+          <label>FAQ<textarea id="faq" rows="9" placeholder="Pergunta: ...\nResposta: ...\n\nPergunta: ...\nResposta: ..."></textarea></label>
+          <div class="grid two">
+            <label>Artigos relacionados<textarea id="relatedContent" rows="5" placeholder="Uma URL interna por linha"></textarea></label>
+            <label>Fontes verificadas<textarea id="sources" rows="5" placeholder="URLs ou referências usadas na apuração, uma por linha"></textarea></label>
+          </div>
+          <label>Transparência / afiliados<textarea id="affiliateDisclosure" rows="4" placeholder="Explique de forma clara quando houver links de afiliado e como isso não substitui a análise editorial."></textarea></label>
+
+          <div class="editorFooter">
+            <div id="validation" class="validation" role="status"></div>
+            <div class="actions"><button id="exportArticle" class="button" type="button">Exportar JSON</button><button class="button primary" type="submit">Salvar artigo</button></div>
+          </div>
+        </form>
+      </section>
+    </section>
+    <footer>Opinião Real · CMS editorial · Sem métricas, preços, avaliações ou experiências inventadas.</footer>
+  </main>
+  <script src="/admin/artigos/artigos.js"></script>
+</body>
+</html>
