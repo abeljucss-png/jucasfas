@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://opiniaoreal.com/sitemap.xml
+Sitemap: https://opiniaoreal.com/video-sitemap.xml
