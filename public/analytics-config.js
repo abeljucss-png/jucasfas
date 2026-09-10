@@ -3,5 +3,7 @@ window.OPINIA_REAL_ANALYTICS = Object.assign({
   gtmContainerId: '',
   googleAdsConversionId: '',
   googleAdsConversionLabel: '',
+  googleAdsRemarketingEnabled: true,
+  metaPixelId: '',
   debug: false
 }, window.OPINIA_REAL_ANALYTICS || {});
