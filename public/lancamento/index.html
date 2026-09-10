@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Checklist interno de preparação para o lançamento do Opinião Real.">
+<title>Checklist de lançamento | Opinião Real</title>
+<link rel="icon" type="image/svg+xml" href="/brand/opiniao-real-mark.svg">
+<link rel="stylesheet" href="/brand.css">
+<link rel="stylesheet" href="/lancamento/lancamento.css">
+</head>
+<body>
+<header class="launchHeader"><div class="launchWrap"><a class="brand" href="/"><span>OR</span>Opinião <b>Real</b></a><a class="backLink" href="/">Voltar ao site</a></div></header>
+<main class="launchWrap">
+<section class="hero">
+  <p class="eyebrow">CONTROLE DE LANÇAMENTO</p>
+  <h1>O Opinião Real está pronto para receber tráfego?</h1>
+  <p class="lead">Use esta central para revisar domínio, páginas, SEO, mensuração, conteúdo, Google Ads e os testes finais antes de colocar verba na operação.</p>
+  <div class="readiness" aria-live="polite"><div><span>Progresso da checklist</span><strong id="progressText">0%</strong></div><div class="progress"><span id="progressBar"></span></div><p id="readinessMessage">Marque apenas o que foi realmente verificado.</p></div>
+</section>
+
+<section class="notice"><strong>Regra de lançamento:</strong> este painel não finge que uma configuração externa foi validada. Domínio, SSL, velocidade, Search Console, GA4, GTM, contas de anúncios e conversões precisam ser confirmados no ambiente real.</section>
+
+<div class="grid">
+<section class="panel"><div class="panelHead"><span class="num">01</span><div><p class="eyebrow">DOMÍNIO</p><h2>Infraestrutura</h2></div></div>
+<div class="checks">
+<label><input type="checkbox" data-key="domain"><span><b>Domínio conectado</b><small>Confirmar que opiniaoreal.com aponta para a hospedagem de produção.</small></span></label>
+<label><input type="checkbox" data-key="ssl"><span><b>SSL ativo</b><small>Abrir HTTPS e confirmar ausência de alertas de certificado ou conteúdo misto.</small></span></label>
+<label><input type="checkbox" data-key="mobile"><span><b>Experiência mobile</b><small>Testar navegação, menu, CTAs, tabelas, imagens e formulários em celular real.</small></span></label>
+<label><input type="checkbox" data-key="speed"><span><b>Velocidade verificada</b><small>Rodar PageSpeed Insights/Lighthouse em Home e na principal página comercial.</small></span></label>
+</div></section>
+
+<section class="panel"><div class="panelHead"><span class="num">02</span><div><p class="eyebrow">CONFIANÇA</p><h2>Páginas obrigatórias</h2></div></div>
+<div class="checks">
+<a class="pageCheck" href="/" target="_blank"><b>Home</b><span>abrir ↗</span></a>
+<a class="pageCheck" href="/sobre-nos" target="_blank"><b>Sobre Nós</b><span>abrir ↗</span></a>
+<a class="pageCheck" href="/como-avaliamos" target="_blank"><b>Como Avaliamos</b><span>abrir ↗</span></a>
+<a class="pageCheck" href="/contact" target="_blank"><b>Contato</b><span>abrir ↗</span></a>
+<a class="pageCheck" href="/privacy" target="_blank"><b>Política de Privacidade</b><span>abrir ↗</span></a>
+<a class="pageCheck" href="/terms" target="_blank"><b>Termos de Uso</b><span>abrir ↗</span></a>
+<a class="pageCheck" href="/afiliados" target="_blank"><b>Aviso de Afiliados</b><span>abrir ↗</span></a>
+<a class="pageCheck" href="/transparencia" target="_blank"><b>Transparência</b><span>abrir ↗</span></a>
+</div></section>
+
+<section class="panel"><div class="panelHead"><span class="num">03</span><div><p class="eyebrow">SEO</p><h2>Busca orgânica</h2></div></div>
+<div class="checks">
+<label><input type="checkbox" data-key="gsc"><span><b>Google Search Console</b><small>Propriedade verificada e sitemap enviado.</small></span></label>
+<label><input type="checkbox" data-key="sitemap"><span><b>Sitemap</b><small>Confirmar sitemap.xml e video-sitemap.xml acessíveis e atualizados.</small></span></label>
+<label><input type="checkbox" data-key="robots"><span><b>Robots.txt</b><small>Confirmar regras e referências aos sitemaps.</small></span></label>
+<label><input type="checkbox" data-key="metadata"><span><b>Meta titles e descriptions</b><small>Revisar páginas comerciais, institucionais e principais categorias.</small></span></label>
+<label><input type="checkbox" data-key="urls"><span><b>URLs amigáveis</b><small>Sem parâmetros desnecessários; canônicas coerentes com as páginas publicadas.</small></span></label>
+<label><input type="checkbox" data-key="schema"><span><b>Schema</b><small>Validar WebSite, Organization/Article/Breadcrumb e FAQ quando aplicável.</small></span></label>
+</div></section>
+
+<section class="panel"><div class="panelHead"><span class="num">04</span><div><p class="eyebrow">MENSURAÇÃO</p><h2>Analytics</h2></div></div>
+<div class="checks">
+<label><input type="checkbox" data-key="ga4"><span><b>Google Analytics 4</b><small>Measurement ID configurado e recebendo page_view no ambiente de produção.</small></span></label>
+<label><input type="checkbox" data-key="gtm"><span><b>Google Tag Manager</b><small>Container publicado e tags disparando conforme o plano de mensuração.</small></span></label>
+<label><input type="checkbox" data-key="view"><span><b>Visualização</b><small>page_view e navegação SPA aparecem corretamente no Analytics.</small></span></label>
+<label><input type="checkbox" data-key="affiliateEvent"><span><b>Clique afiliado</b><small>affiliate_click identifica página, posição e produto sem expor credenciais.</small></span></label>
+<label><input type="checkbox" data-key="conversion"><span><b>Conversão</b><small>Definir e validar a conversão real usada pelo Google Ads, sem confundir clique com venda.</small></span></label>
+</div></section>
+
+<section class="panel"><div class="panelHead"><span class="num">05</span><div><p class="eyebrow">EDITORIAL</p><h2>Conteúdo inicial</h2></div></div>
+<div class="checks">
+<label><input type="checkbox" data-key="fiveArticles"><span><b>5 artigos principais publicados</b><small>Conteúdo revisado, útil, original e com dados comerciais realmente conferidos.</small></span></label>
+<label><input type="checkbox" data-key="commercial"><span><b>1 página comercial forte</b><small>Landing principal com comparação clara, transparência e CTAs afiliados rastreáveis.</small></span></label>
+<label><input type="checkbox" data-key="institutional"><span><b>Páginas institucionais revisadas</b><small>Sobre, metodologia, transparência, afiliados, privacidade, termos e contato.</small></span></label>
+</div></section>
+
+<section class="panel"><div class="panelHead"><span class="num">06</span><div><p class="eyebrow">AQUISIÇÃO</p><h2>Google Ads</h2></div></div>
+<div class="checks">
+<label><input type="checkbox" data-key="landing"><span><b>Landing funcionando</b><small>Teste URL final, carregamento, mobile, navegação e CTA.</small></span></label>
+<label><input type="checkbox" data-key="affiliateLinks"><span><b>Links afiliados funcionando</b><small>Abrir os principais CTAs e conferir destino, tracking e atributo sponsored.</small></span></label>
+<label><input type="checkbox" data-key="tracking"><span><b>Rastreamento ativo</b><small>Validar UTMs, gclid e eventos no caminho anúncio → página → clique.</small></span></label>
+<label><input type="checkbox" data-key="negativeKeywords"><span><b>Palavras negativas configuradas</b><small>Revisar intenção, termos irrelevantes e consultas iniciais da campanha.</small></span></label>
+</div></section>
+
+<section class="panel wide"><div class="panelHead"><span class="num">07</span><div><p class="eyebrow">QA</p><h2>Teste final antes da verba</h2></div></div>
+<div class="qaGrid">
+<label><input type="checkbox" data-key="qaMobile"><span><b>Celular</b><small>Menu, links, imagens, tabelas, scroll, CTA e formulários.</small></span></label>
+<label><input type="checkbox" data-key="qaSpeed"><span><b>Velocidade</b><small>Home + página comercial principal em rede móvel.</small></span></label>
+<label><input type="checkbox" data-key="qaForms"><span><b>Formulários</b><small>Validação, envio, estados de erro/sucesso e política de privacidade.</small></span></label>
+<label><input type="checkbox" data-key="qaButtons"><span><b>Botões</b><small>Todos os CTAs abrem a ação esperada.</small></span></label>
+<label><input type="checkbox" data-key="qaLinks"><span><b>Links</b><small>Links internos, externos, institucionais e afiliados.</small></span></label>
+<label><input type="checkbox" data-key="qaNoFake"><span><b>Conteúdo sem dados inventados</b><small>Preços, especificações, avaliações e resultados comerciais foram conferidos.</small></span></label>
+</div></section>
+
+<section class="panel wide plan"><div class="panelHead"><span class="num">08</span><div><p class="eyebrow">30 DIAS</p><h2>Plano pós-lançamento</h2></div></div>
+<div class="timeline">
+<div><span>SEMANA 1</span><h3>Publicar e indexar</h3><p>Publicar a versão final, enviar sitemap, validar Search Console e corrigir erros de rastreamento.</p></div>
+<div><span>SEMANA 2</span><h3>Iniciar Google Ads</h3><p>Começar com orçamento controlado, intenção de busca clara e acompanhamento diário dos termos.</p></div>
+<div><span>SEMANA 3</span><h3>Analisar dados</h3><p>Comparar CPC, CTR, cliques afiliados, conversões e desempenho por página/campanha.</p></div>
+<div><span>SEMANA 4</span><h3>Otimizar e escalar</h3><p>Cortar desperdícios, melhorar páginas de baixa conversão e aumentar investimento apenas nos vencedores.</p></div>
+</div></section>
+</div>
+
+<section class="launchGate"><div><p class="eyebrow">CRITÉRIO DE LIBERAÇÃO</p><h2 id="gateTitle">Ainda não liberar tráfego pago</h2><p id="gateText">A campanha deve esperar enquanto itens críticos permanecerem sem validação.</p></div><div class="gateActions"><a href="/gestao-afiliados/">Gestão de afiliados</a><a href="/analytics/">Analytics</a><button id="reset">Limpar checklist</button></div></section>
+<footer><a href="/">Opinião Real</a><span>Checklist interno de lançamento · 2026</span></footer>
+</main>
+<script src="/lancamento/lancamento.js"></script>
+</body>
+</html>
