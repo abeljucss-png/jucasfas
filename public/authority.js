@@ -32,7 +32,25 @@
     var footer=document.createElement('footer');footer.className='authorityFooter';footer.innerHTML='<div class="authorityShell"><div class="authorityLinks"><a href="/sobre-nos">Sobre Nós</a><a href="/como-avaliamos">Como Avaliamos</a><a href="/transparencia">Transparência</a><a href="/privacy">Política de Privacidade</a><a href="/terms">Termos de Uso</a><a href="/afiliados">Aviso de Afiliados</a><a href="/contact">Contato</a></div><div>© 2026 Opinião Real. Portal de análises, comparativos e guias de compra.</div></div>';
     root.appendChild(footer);
   }
-  function addSchema(){
+  function enrichRouteSchema(){
+    var node=document.getElementById('route-schema');
+    if(!node)return false;
+    try{
+      var data=JSON.parse(node.textContent);
+      data['@context']='https://schema.org';
+      data['@graph']=data['@graph']||[];
+      var org=data['@graph'].find(function(x){return x['@type']==='Organization'&&x.name===BRAND});
+      if(!org)data['@graph'].unshift({'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/',description:DESCRIPTION});
+      if(commercial()){
+        var article=data['@graph'].find(function(x){return x['@type']==='Article'});
+        if(article){article.author={'@type':'Organization',name:'Equipe Opinião Real',url:'https://opiniaoreal.com/autor/equipe-opiniao-real'};article.publisher={'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/'};article.dateModified=DATE;}
+      }
+      node.textContent=JSON.stringify(data);node.setAttribute('data-authority-enriched',path()+'|'+document.title);
+      return true;
+    }catch(_){return false}
+  }
+  function addStandaloneSchema(){
+    if(document.getElementById('route-schema'))return;
     var signature=path()+'|'+document.title+'|'+(commercial()?'article':'page');
     var current=document.getElementById('authority-schema');
     if(current&&current.getAttribute('data-signature')===signature)return;
@@ -44,7 +62,7 @@
     if(commercial())graph.push({'@type':'Article',headline:document.title.replace(/ \|.*$/,''),description:DESCRIPTION,url:'https://opiniaoreal.com'+path(),dateModified:DATE,publisher:{'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/'},author:{'@type':'Organization',name:'Equipe Opinião Real',url:'https://opiniaoreal.com/autor/equipe-opiniao-real'}});
     var s=document.createElement('script');s.id='authority-schema';s.setAttribute('data-signature',signature);s.type='application/ld+json';s.textContent=JSON.stringify({'@context':'https://schema.org','@graph':graph});document.head.appendChild(s);
   }
-  function run(){addMeta();addFooterLinks();addFallbackFooter();addSchema()}
+  function run(){addMeta();addFooterLinks();addFallbackFooter();if(!enrichRouteSchema())addStandaloneSchema()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
   new MutationObserver(function(){run()}).observe(document.documentElement,{childList:true,subtree:true});
 })();
