@@ -1,0 +1,15 @@
+{
+  "$schema":"https://schemas.wp.org/wp/6.6/theme.json",
+  "version":3,
+  "settings":{
+    "appearanceTools":true,
+    "layout":{"contentSize":"1160px","wideSize":"1320px"},
+    "color":{"palette":[
+      {"slug":"navy","color":"#0B1F3A","name":"Navy / Ink"},{"slug":"blue","color":"#294D75","name":"Editorial Blue"},{"slug":"text","color":"#172033","name":"Text Dark"},{"slug":"muted","color":"#667085","name":"Muted"},{"slug":"line","color":"#E5E9EF","name":"Line"},{"slug":"soft","color":"#F6F8FB","name":"Soft"},{"slug":"white","color":"#FFFFFF","name":"White"},{"slug":"gold","color":"#C98B3C","name":"Gold / Accent"},{"slug":"soft-blue","color":"#EEF3F8","name":"Soft Blue"},{"slug":"success","color":"#247A52","name":"Success"},{"slug":"error","color":"#B42318","name":"Error"}
+    ]},
+    "typography":{"fontFamilies":[
+      {"fontFamily":"\"DM Sans\", system-ui, sans-serif","slug":"dm-sans","name":"DM Sans"},{"fontFamily":"\"Playfair Display\", Georgia, serif","slug":"playfair","name":"Playfair Display"}
+    ],"fontSizes":[{"slug":"body","size":"16px","name":"Body"},{"slug":"lead","size":"19px","name":"Lead"},{"slug":"h3","size":"22px","name":"H3"},{"slug":"h2","size":"35px","name":"H2"},{"slug":"h1","size":"52px","name":"H1"}]}
+  },
+  "styles":{"color":{"text":"var:preset|color|text","background":"var:preset|color|white"},"typography":{"fontFamily":"var:preset|font-family|dm-sans","fontSize":"16px","lineHeight":"1.55"},"elements":{"heading":{"color":{"text":"var:preset|color|navy"},"typography":{"fontFamily":"var:preset|font-family|playfair","fontWeight":"700"},"spacing":{"margin":{"bottom":"16px"}}},"button":{"border":{"radius":"7px"},"typography":{"fontWeight":"600"}}}}
+}
