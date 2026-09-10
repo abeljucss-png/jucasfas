@@ -35,18 +35,17 @@
   function enrichRouteSchema(){
     var node=document.getElementById('route-schema');
     if(!node)return false;
+    var signature=path()+'|'+document.title;
+    if(node.getAttribute('data-authority-enriched')===signature)return true;
     try{
-      var data=JSON.parse(node.textContent);
-      data['@context']='https://schema.org';
-      data['@graph']=data['@graph']||[];
+      var data=JSON.parse(node.textContent);data['@context']='https://schema.org';data['@graph']=data['@graph']||[];
       var org=data['@graph'].find(function(x){return x['@type']==='Organization'&&x.name===BRAND});
       if(!org)data['@graph'].unshift({'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/',description:DESCRIPTION});
       if(commercial()){
         var article=data['@graph'].find(function(x){return x['@type']==='Article'});
         if(article){article.author={'@type':'Organization',name:'Equipe Opinião Real',url:'https://opiniaoreal.com/autor/equipe-opiniao-real'};article.publisher={'@type':'Organization',name:BRAND,url:'https://opiniaoreal.com/'};article.dateModified=DATE;}
       }
-      node.textContent=JSON.stringify(data);node.setAttribute('data-authority-enriched',path()+'|'+document.title);
-      return true;
+      node.textContent=JSON.stringify(data);node.setAttribute('data-authority-enriched',signature);return true;
     }catch(_){return false}
   }
   function addStandaloneSchema(){
