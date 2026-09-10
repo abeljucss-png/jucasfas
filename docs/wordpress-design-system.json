@@ -1,0 +1,56 @@
+{
+  "version": "1.0",
+  "brand": {
+    "name": "Opinião Real",
+    "positioning": "Portal de análises, comparativos e guias de compra.",
+    "personality": ["humana", "criteriosa", "editorial", "transparente", "sofisticada"]
+  },
+  "fonts": {
+    "ui": "DM Sans, system-ui, sans-serif",
+    "editorial": "Playfair Display, Georgia, serif"
+  },
+  "colors": {
+    "ink": "#0B1F3A",
+    "blue": "#294D75",
+    "text": "#172033",
+    "muted": "#667085",
+    "line": "#E5E9EF",
+    "soft": "#F6F8FB",
+    "white": "#FFFFFF",
+    "gold": "#C98B3C",
+    "softBlue": "#EEF3F8",
+    "success": "#247A52",
+    "warning": "#8A5A16",
+    "error": "#B42318"
+  },
+  "layout": {
+    "containerMaxWidth": "1160px",
+    "desktopGutter": "24px",
+    "mobileGutter": "16px",
+    "headerHeight": "76px",
+    "mobileHeaderHeight": "68px",
+    "sectionVerticalPadding": "65-90px",
+    "radii": {"sm": "7px", "md": "12px", "lg": "18px"}
+  },
+  "breakpoints": {"mobile": "480px", "tablet": "850px"},
+  "contentModels": ["seo_article", "product", "comparison"],
+  "homeSections": ["hero", "categories", "recommended", "recent_articles", "how_we_evaluate", "final_cta", "footer"],
+  "articleBlocks": ["breadcrumbs", "hero", "quick_summary", "criteria", "comparison", "product_analysis", "pros_cons", "daily_use", "faq", "conclusion", "affiliate_cta", "related", "sources"],
+  "wordpressMapping": {
+    "header": "theme-part/header.php or Elementor Header",
+    "articleCard": "template-part/card-article.php",
+    "productCard": "template-part/card-product.php",
+    "comparison": "custom Gutenberg block or Elementor widget",
+    "recommendation": "reusable Gutenberg Pattern or Elementor template",
+    "faq": "reusable block with visible content + matching FAQ schema",
+    "affiliateCta": "template-part/affiliate-cta.php",
+    "seoArticle": "single-seo_article.php"
+  },
+  "qualityRules": [
+    "Do not fabricate price, specification, rating, availability or review data",
+    "Use real product imagery and descriptive ALT",
+    "Preserve existing SEO URLs whenever possible",
+    "Render final SEO content server-side in WordPress",
+    "Never expose privileged WordPress credentials in browser code"
+  ]
+}
